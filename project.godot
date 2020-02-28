@@ -19,6 +19,10 @@ config/name="voice_zombie"
 run/main_scene="res://game.tscn"
 config/icon="res://icon.png"
 
+[audio]
+
+enable_audio_input=true
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
