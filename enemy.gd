@@ -1,10 +1,15 @@
 extends KinematicBody2D
 
 var target
-onready var speed = rand_range(20, 30)
+var multiplier = 1
+var speed = 1
 
 onready var spawn_location = [Vector2(0, 0), Vector2(get_viewport().size.x, 0), 
 	Vector2(get_viewport().size.x, get_viewport().size.y), Vector2(0, get_viewport().size.y)]
+
+func init(multiplier):
+	self.multiplier = multiplier
+	speed = rand_range(30, 40) * multiplier
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,6 +21,8 @@ func _draw():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	#$Tween.interpolate_property($Sprite, "scale", 0.150, 0.8, 2.0, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN)
+	#$Tween.start()
 	update()
 	
 func _physics_process(delta):
