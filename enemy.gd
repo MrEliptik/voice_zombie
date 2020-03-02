@@ -14,5 +14,5 @@ func _process(delta):
 	update()
 	
 func move_toward(point):
-	print('Moving')
+	#print('Moving')
 	pass
