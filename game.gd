@@ -44,7 +44,8 @@ func _draw():
 
 func _process(_delta):
 	update()
-	
+
+func _physics_process(delta):
 	for i in range($EnemiesContainer.get_child_count()):
 		$EnemiesContainer.get_child(i).move_toward($Player.global_position)
 
@@ -52,11 +53,15 @@ func _process(_delta):
 func _ready():
 	randomize()
 	
+	
 	effect = AudioServer.get_bus_effect(AudioServer.get_bus_index("Record"), 0)
 	effect.set_recording_active(true)
 	
 	get_tree().root.connect("size_changed", self, "_on_viewport_size_changed")
 	spectrum = AudioServer.get_bus_effect_instance(AudioServer.get_bus_index("Record"), 1)
+	
+	$Player.global_position = offset
+	$Player/Area2D.connect("body_exited", self, "_on_Area2D_body_entered")
 	
 	# Spawn enemies
 	for i in range(ENEMIES_NB):
@@ -70,3 +75,7 @@ func _on_viewport_size_changed():
 
 func _on_Timer_timeout():
 	color = Color(randf(), randf(), randf())
+
+func _on_Area2D_body_entered(body):
+	print("AAAAAAAAAAA")
+	get_tree().reload_current_scene()
