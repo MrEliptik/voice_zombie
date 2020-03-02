@@ -1,11 +1,12 @@
 extends Node2D
 
 const VU_COUNT = 180
-const FREQ_MAX = 11050.0
+const FREQ_MAX = 4000.0
+#const FREQ_MAX = 11050.0
 
 const enemy = preload("res://enemy.tscn")
 
-const ENEMIES_NB = 10
+var ENEMIES_NB = 10
 
 onready var window_w = get_viewport().size.x
 onready var window_h = get_viewport().size.y
@@ -17,6 +18,8 @@ var spectrum = null
 var recording
 var effect = null
 var points
+
+var wave = 1
 
 onready var color = Color(randf(), randf(), randf())
 
@@ -48,10 +51,13 @@ func _process(_delta):
 	update()
 
 func _physics_process(delta):
+	if $CanvasLayer/HUD/AnimationPlayer.is_playing():
+		return
+	
 	if points:
 		for point in points:
 			# Cast to point
-			$Player/RayCast2D.set_cast_to(Vector2(point.x, point.y))
+			$Player/RayCast2D.set_cast_to(Vector2(point.x, point.y).rotated(deg2rad(-90)))
 			#print(Vector2(point.x, point.y))
 #			# Check if collision
 			$Player/RayCast2D.force_raycast_update()
@@ -59,14 +65,18 @@ func _physics_process(delta):
 				var enemy = $Player/RayCast2D.get_collider()
 				print(enemy)
 				$EnemiesContainer.remove_child(enemy)
+			
+			#yield(get_tree().create_timer(0.5), "timeout")
 	
 	for i in range($EnemiesContainer.get_child_count()):
-		$EnemiesContainer.get_child(i).move_toward($Player/RayCast2D.global_position)
+		$EnemiesContainer.get_child(i).move_toward($Player.global_position)
+		
+	if $EnemiesContainer.get_child_count() == 0:
+		next_wave()
 
 
 func _ready():
 	randomize()
-	
 	
 	effect = AudioServer.get_bus_effect(AudioServer.get_bus_index("Record"), 0)
 	effect.set_recording_active(true)
@@ -75,12 +85,17 @@ func _ready():
 	spectrum = AudioServer.get_bus_effect_instance(AudioServer.get_bus_index("Record"), 1)
 	
 	$Player.global_position = offset
-	$Player/Area2D.connect("body_exited", self, "_on_Area2D_body_entered")
-	$Player/RayCast2D.position = offset
+	$Player/Area2D.connect("body_entered", self, "_on_Area2D_body_entered")
+	$Player/RayCast2D.global_position = offset
 	
 	# Spawn enemies
 	for i in range(ENEMIES_NB):
-		$EnemiesContainer.add_child(enemy.instance())
+		var x = enemy.instance()
+		x.init(1)
+		$EnemiesContainer.add_child(x)
+		
+	$CanvasLayer/StartScreen.connect("start", self, "start_game")
+	get_tree().paused = true
 
 func _on_viewport_size_changed():
 	# Do whatever you need to do when the window changes!
@@ -96,3 +111,28 @@ func _on_Timer_timeout():
 func _on_Area2D_body_entered(body):
 	print("AAAAAAAAAAA")
 	get_tree().reload_current_scene()
+	
+func start_game():
+	$CanvasLayer/StartScreen.visible = false
+	$CanvasLayer/HUD.visible = true
+		
+	# Play first wave animation
+	$CanvasLayer/HUD/AnimationPlayer.play("wave_switch")
+	yield(get_node("CanvasLayer/HUD/AnimationPlayer"), "animation_finished")
+	get_tree().paused = false
+
+func next_wave():
+	#get_tree().paused = true
+	wave += 1
+	$CanvasLayer/HUD.set_wave(wave)
+	
+	# Play first wave animation
+	$CanvasLayer/HUD/AnimationPlayer.play("wave_switch")
+	yield(get_node("CanvasLayer/HUD/AnimationPlayer"), "animation_finished")
+	
+	ENEMIES_NB += int(1 + (wave/3))
+	# Spawn enemies
+	for i in range(ENEMIES_NB):
+		var x = enemy.instance()
+		x.init(1 + (wave/3))
+		$EnemiesContainer.add_child(x)
