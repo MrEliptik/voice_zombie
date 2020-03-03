@@ -44,9 +44,6 @@ func _draw():
 		
 		draw_set_transform(Vector2(offset.x, offset.y), deg2rad(-90), Vector2(1.0, 1.0))
 		draw_colored_polygon(points, color)
-		
-
-	#draw_colored_polygon(points, Color(1.0, 1.0, 1.0))
 
 func _process(_delta):
 	update()
@@ -65,8 +62,7 @@ func _physics_process(delta):
 			if $Player/RayCast2D.is_colliding():
 				var enemy = $Player/RayCast2D.get_collider()
 				if enemy is KinematicBody2D:
-					enemy.get_node("fake_explosion_particles").particles_explode = true
-					enemy.get_node("Sprite").visible = false
+					enemy.die()
 			
 			#yield(get_tree().create_timer(0.5), "timeout")
 	
@@ -121,7 +117,12 @@ func start_game():
 		
 	# Play first wave animation
 	$CanvasLayer/HUD/AnimationPlayer.play("wave_switch")
+	$CanvasLayer/HUD/WaveEffect.play()
 	yield(get_node("CanvasLayer/HUD/AnimationPlayer"), "animation_finished")
+	
+	visible = true
+	for enemy in $EnemiesContainer.get_children():
+		enemy.visible = true
 	get_tree().paused = false
 
 func next_wave():
