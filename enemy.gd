@@ -3,6 +3,7 @@ extends KinematicBody2D
 var target
 var multiplier = 1
 var speed = 1
+var dead = false
 
 onready var spawn_location = [Vector2(0, 0), Vector2(get_viewport().size.x, 0), 
 	Vector2(get_viewport().size.x, get_viewport().size.y), Vector2(0, get_viewport().size.y)]
@@ -28,6 +29,16 @@ func _process(delta):
 func _physics_process(delta):
 	if target:
 		move_and_collide(target * speed * delta)
+		
+func die():
+	if dead: return
+	dead = true
+	$fake_explosion_particles.visible = true
+	$fake_explosion_particles.particles_explode = true
+	$Sprite.visible = false
+	var select_idx = randi()%$SFX.get_child_count()
+	var sound = $SFX.get_child(select_idx)
+	sound.play()
 	
 func move_toward(point):
 	#print('At: ' + str(self.global_position) + ' moving to ' + str(point))
