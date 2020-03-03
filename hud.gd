@@ -5,6 +5,8 @@ extends Control
 func _ready():
 	pass # Replace with function body.
 
+func set_score(score):
+	$Score.text = 'SCORE: ' + str(score)
 
 func set_wave(wave):
 	$Wave.text = 'WAVE ' + str(wave)
