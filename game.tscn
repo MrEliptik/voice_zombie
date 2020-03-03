@@ -5,7 +5,7 @@
 [ext_resource path="res://hud.tscn" type="PackedScene" id=3]
 [ext_resource path="res://startScreen.tscn" type="PackedScene" id=4]
 
-[sub_resource type="AudioStreamMicrophone" id=2]
+[sub_resource type="AudioStreamMicrophone" id=1]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -18,7 +18,7 @@ script = ExtResource( 1 )
 enabled = true
 
 [node name="AudioStreamRecord" type="AudioStreamPlayer" parent="."]
-stream = SubResource( 2 )
+stream = SubResource( 1 )
 autoplay = true
 bus = "Record"
 

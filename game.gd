@@ -19,6 +19,7 @@ var recording
 var effect = null
 var points
 
+var score = 0
 var wave = 1
 
 onready var color = Color(randf(), randf(), randf())
@@ -63,8 +64,9 @@ func _physics_process(delta):
 			$Player/RayCast2D.force_raycast_update()
 			if $Player/RayCast2D.is_colliding():
 				var enemy = $Player/RayCast2D.get_collider()
-				print(enemy)
-				$EnemiesContainer.remove_child(enemy)
+				if enemy is KinematicBody2D:
+					enemy.get_node("fake_explosion_particles").particles_explode = true
+					enemy.get_node("Sprite").visible = false
 			
 			#yield(get_tree().create_timer(0.5), "timeout")
 	
@@ -92,6 +94,7 @@ func _ready():
 	for i in range(ENEMIES_NB):
 		var x = enemy.instance()
 		x.init(1)
+		x.get_node("fake_explosion_particles").connect("finished", self, "on_enemy_exploded")
 		$EnemiesContainer.add_child(x)
 		
 	$CanvasLayer/StartScreen.connect("start", self, "start_game")
@@ -136,3 +139,8 @@ func next_wave():
 		var x = enemy.instance()
 		x.init(1 + (wave/3))
 		$EnemiesContainer.add_child(x)
+
+func on_enemy_exploded(enemy):
+	$EnemiesContainer.remove_child(enemy)
+	score += 1
+	$CanvasLayer/HUD.set_score(score)
