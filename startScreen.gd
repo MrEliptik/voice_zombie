@@ -12,6 +12,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _input(event):
+	if !visible: return
 	if event.is_action_released("ui_accept"):
 		emit_signal("start")
 
