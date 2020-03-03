@@ -1,16 +1,21 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://fonts/Manti Sans Regular Demo.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://audio/sfx/Bubble heavy 2.wav" type="AudioStream" id=1]
 [ext_resource path="res://hud.gd" type="Script" id=2]
+[ext_resource path="res://fonts/WickedScaryMovie.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 48
-font_data = ExtResource( 1 )
+size = 64
+outline_size = 3
+outline_color = Color( 0.0941176, 0.662745, 0.580392, 1 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 96
+size = 142
+outline_size = 3
+outline_color = Color( 0.0941176, 0.662745, 0.580392, 1 )
 use_filter = true
-font_data = ExtResource( 1 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="Animation" id=3]
 resource_name = "wave_switch"
@@ -63,8 +68,10 @@ tracks/3/keys = {
 }
 
 [sub_resource type="DynamicFont" id=4]
-size = 36
-font_data = ExtResource( 1 )
+size = 64
+outline_size = 3
+outline_color = Color( 0.0941176, 0.662745, 0.580392, 1 )
+font_data = ExtResource( 3 )
 
 [node name="HUD" type="Control"]
 anchor_right = 1.0
@@ -77,6 +84,7 @@ __meta__ = {
 [node name="Wave" type="Label" parent="."]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
+margin_top = 5.0
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 1 )
 text = "WAVE 1"
@@ -108,6 +116,8 @@ size_flags_horizontal = 7
 size_flags_vertical = 7
 custom_fonts/font = SubResource( 2 )
 text = "WAVE 1"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -117,7 +127,15 @@ anims/wave_switch = SubResource( 3 )
 
 [node name="Score" type="Label" parent="."]
 anchor_right = 1.0
+margin_top = 5.0
+margin_right = -5.0
 margin_bottom = 57.0
 custom_fonts/font = SubResource( 4 )
 text = "SCORE: 0"
 align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaveEffect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
