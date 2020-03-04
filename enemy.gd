@@ -5,16 +5,20 @@ var multiplier = 1
 var speed = 1
 var dead = false
 
-onready var spawn_location = [Vector2(0, 0), Vector2(get_viewport().size.x, 0), 
-	Vector2(get_viewport().size.x, get_viewport().size.y), Vector2(0, get_viewport().size.y)]
+onready var spawn_location = [
+		Vector2(0, rand_range(0, get_viewport().size.y)), 
+		Vector2(rand_range(0, get_viewport().size.x), 0), 
+		Vector2(get_viewport().size.x, rand_range(0, get_viewport().size.y)),
+		Vector2(rand_range(0, get_viewport().size.x), get_viewport().size.y)
+	]
 
 func init(multiplier):
 	self.multiplier = multiplier
-	speed = rand_range(30, 40) * multiplier
+	speed = rand_range(25, 35) * multiplier
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	self.global_position = spawn_location[rand_range(0, len(spawn_location)-1)]
+	self.global_position = spawn_location[randi()%len(spawn_location)]
 
 func _draw():
 	#draw_rect(Rect2(Vector2(0, 0), Vector2(20, 20)), Color(0.5, 0.5, 0.5))
@@ -22,8 +26,6 @@ func _draw():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#$Tween.interpolate_property($Sprite, "scale", 0.150, 0.8, 2.0, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN)
-	#$Tween.start()
 	update()
 	
 func _physics_process(delta):
