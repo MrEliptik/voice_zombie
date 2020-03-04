@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://audio/music/spooky_ambiance.ogg" type="AudioStream" id=1]
+
+[node name="Music" type="Node2D"]
+
+[node name="AmbianceMusic" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 1 )
+volume_db = -17.505
+autoplay = true
