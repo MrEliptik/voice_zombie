@@ -1,7 +1,7 @@
 extends Node2D
 
 const VU_COUNT = 180
-const FREQ_MAX = 4000.0
+const FREQ_MAX = 3000
 #const FREQ_MAX = 11050.0
 
 const enemy = preload("res://enemy.tscn")
@@ -35,7 +35,6 @@ func _draw():
 			var magnitude: float = spectrum.get_magnitude_for_frequency_range(prev_hz, hz).length()
 			var energy = clamp((MIN_DB + linear2db(magnitude)) / MIN_DB, 0, 1)
 			var height = energy * HEIGHT
-			#draw_rect(Rect2(w * i, HEIGHT - height, w, height), Color.white)
 			prev_hz = hz
 			
 			var phi = i * PI * 2.0 / VU_COUNT
@@ -56,15 +55,12 @@ func _physics_process(delta):
 		for point in points:
 			# Cast to point
 			$Player/RayCast2D.set_cast_to(Vector2(point.x, point.y).rotated(deg2rad(-90)))
-			#print(Vector2(point.x, point.y))
 #			# Check if collision
 			$Player/RayCast2D.force_raycast_update()
 			if $Player/RayCast2D.is_colliding():
 				var enemy = $Player/RayCast2D.get_collider()
 				if enemy is KinematicBody2D:
 					enemy.die()
-			
-			#yield(get_tree().create_timer(0.5), "timeout")
 	
 	for i in range($EnemiesContainer.get_child_count()):
 		$EnemiesContainer.get_child(i).move_toward($Player.global_position)
