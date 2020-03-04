@@ -6,10 +6,10 @@ var speed = 1
 var dead = false
 
 onready var spawn_location = [
-		Vector2(0, rand_range(0, get_viewport().size.y)), 
-		Vector2(rand_range(0, get_viewport().size.x), 0), 
-		Vector2(get_viewport().size.x, rand_range(0, get_viewport().size.y)),
-		Vector2(rand_range(0, get_viewport().size.x), get_viewport().size.y)
+		Vector2(-50, rand_range(-50, get_viewport().size.y)), 
+		Vector2(rand_range(-50, get_viewport().size.x), -50), 
+		Vector2(get_viewport().size.x, rand_range(-50, get_viewport().size.y)),
+		Vector2(rand_range(-50, get_viewport().size.x), get_viewport().size.y)
 	]
 
 func init(multiplier):
