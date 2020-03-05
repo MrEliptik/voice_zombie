@@ -6,6 +6,14 @@
 
 A tower defense/zombie like where only your voice can defend you
 
+## itch.io
+
+https://mreliptik.itch.io/voice-zombie
+
+## Install instructions
+
+Unzip and launch exectuable.
+Have a microphone plugged-in. (On browser, click allow microphone)
 
 ## Licences
 
